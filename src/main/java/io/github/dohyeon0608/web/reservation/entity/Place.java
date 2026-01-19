@@ -3,10 +3,7 @@ package io.github.dohyeon0608.web.reservation.entity;
 import io.github.dohyeon0608.web.reservation.entity.common.BaseEntity;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
 import io.github.dohyeon0608.web.reservation.entity.enums.PlaceType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Setter
@@ -16,6 +13,11 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Place extends BaseEntity {
+    @Setter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private PlaceType placeType;

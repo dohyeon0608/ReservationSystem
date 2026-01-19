@@ -13,27 +13,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 public abstract class BaseEntity {
 
-    @Setter
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @CreatedDate
-    private LocalDateTime createdAt;
+    @Column(updatable = false)
+    protected LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
 
-    private LocalDateTime deletedAt;
-
-
-    protected BaseEntity(Long id) {
-        this.id = id;
-    }
-
-    protected BaseEntity() {
-        this(null);
-    }
+    protected LocalDateTime deletedAt;
 
     public void delete() {
         this.deletedAt = LocalDateTime.now();

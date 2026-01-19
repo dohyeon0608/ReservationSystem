@@ -16,12 +16,17 @@ import java.sql.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Timeslot extends BaseEntity {
+    @Setter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
     private Place place;
 
     @Column(nullable = false)
-    private Date reservation_date;
+    private Date reservationDate;
 
     @Column(nullable = false)
     private Time startTime;
@@ -30,7 +35,7 @@ public class Timeslot extends BaseEntity {
     private Time endTime;
 
     @Column(nullable = false)
-    private Integer max_capacity;
+    private Integer maxCapacity;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

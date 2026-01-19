@@ -4,7 +4,9 @@ import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
 import io.github.dohyeon0608.web.reservation.entity.enums.PlaceType;
 import io.github.dohyeon0608.web.reservation.entity.enums.SlotStatus;
+import io.github.dohyeon0608.web.reservation.entity.mapping.Timeslot;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
+import io.github.dohyeon0608.web.reservation.repository.PlaceRepository;
 import io.github.dohyeon0608.web.reservation.service.PlaceService;
 import io.github.dohyeon0608.web.reservation.service.TimeslotService;
 import org.junit.jupiter.api.Assertions;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @SpringBootTest
@@ -31,36 +34,39 @@ class ReservationApplicationTests {
 	}
 
 	@Test
-	public void 타임슬롯_시간() {
-		LocalDate localDate = LocalDate.of(2025, 1, 1);
-		LocalTime specificTime;
-		specificTime = LocalTime.of(12, 0, 0);
-		Time startTime = Time.valueOf(specificTime);
+	public void 타임슬롯_시간_겹침방지() {
+		LocalDateTime localDateTime = LocalDateTime.of(2026, 1, 20, 13, 0, 0);
 
-		specificTime = LocalTime.of(15, 0, 0);
-		Time endTime = Time.valueOf(specificTime);
+		Long placeId = placeService.createPlace(
+				PlaceType.STUDY_ROOM,
+				OperationStatus.OPENED,
+				"의혈스터디룸",
+				1
+		);
 
-		Place place = placeService.getPlaceById(3L);
+		Place place = placeService.getPlaceById(placeId);
 
-		Assertions.assertThrowsExactly(BusinessException.class,
+		Assertions.assertAll(
 				() -> timeslotService.createTimeslot(
 						place,
-						Date.valueOf(localDate),
-						startTime,
-						endTime,
+						Date.valueOf(localDateTime.toLocalDate()),
+						Time.valueOf(localDateTime.toLocalTime()),
+						Time.valueOf(localDateTime.toLocalTime().plusHours(2)),
 						1,
 						SlotStatus.OPENED
 				));
 
-//		Assertions.assertAll(
-//				() -> timeslotService.createTimeslot(
-//						place,
-//						Date.valueOf(localDate),
-//						endTime,
-//						startTime,
-//						1,
-//						SlotStatus.OPENED
-//				));
+		Assertions.assertThrowsExactly(BusinessException.class,
+				() -> timeslotService.createTimeslot(
+						place,
+						Date.valueOf(localDateTime.toLocalDate()),
+						Time.valueOf(localDateTime.toLocalTime().plusHours(1)),
+						Time.valueOf(localDateTime.toLocalTime().plusHours(2)),
+						1,
+						SlotStatus.OPENED
+				));
+
 	}
+
 
 }

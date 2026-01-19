@@ -29,5 +29,6 @@ public class Place extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String name;
 
-    private Integer max_capacity;
+    @Builder.Default
+    private Integer maxCapacity = 1;
 }

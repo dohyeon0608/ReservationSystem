@@ -35,9 +35,11 @@ public class Timeslot extends BaseEntity {
     private Time endTime;
 
     @Column(nullable = false)
-    private Integer maxCapacity;
+    @Builder.Default
+    private Integer maxCapacity = 1;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SlotStatus slotStatus;
+    @Builder.Default
+    private SlotStatus slotStatus = SlotStatus.OPENED;
 }

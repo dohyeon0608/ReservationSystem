@@ -3,13 +3,11 @@ package io.github.dohyeon0608.web.reservation.service;
 import io.github.dohyeon0608.web.reservation.dto.PlaceDto;
 import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
-import io.github.dohyeon0608.web.reservation.entity.enums.PlaceType;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
 import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
 import io.github.dohyeon0608.web.reservation.repository.PlaceRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +17,12 @@ import java.util.List;
 public class PlaceService {
     private final PlaceRepository placeRepository;
 
-    // TODO: 유효성 검사 추가 예정
+    private void validation(Place place) {
+        if(place.getMaxCapacity() < 0) {
+            throw new BusinessException(ErrorCode.PLACE_NEGATIVE_CAPACITY);
+        }
+    }
+
     public Long createPlace(PlaceDto dto) {
         Place place = Place.builder()
                 .placeType(dto.getPlaceType())
@@ -28,12 +31,14 @@ public class PlaceService {
                 .maxCapacity(dto.getMaxCapacity())
                 .build();
 
+        validation(place);
+
         return placeRepository.save(place).getId();
     }
 
-    public List<Place> getOpenedPlaces(int pages, int size) {
+    public List<Place> getPlacesByStatus(OperationStatus status, Pageable pageable) {
         return placeRepository
-                .findPlaceByOperationStatus(OperationStatus.OPENED, PageRequest.of(pages, size));
+                .findPlaceByOperationStatus(status, pageable);
     }
 
     public Place getPlaceById(Long id) {

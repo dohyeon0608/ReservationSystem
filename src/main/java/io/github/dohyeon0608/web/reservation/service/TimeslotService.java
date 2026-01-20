@@ -18,6 +18,10 @@ public class TimeslotService {
     private final TimeslotRepository timeslotRepository;
 
     private void validation(Timeslot timeslot) {
+        if(timeslot.getMaxCapacity() < 0) {
+            throw new BusinessException(ErrorCode.TIMESLOT_NEGATIVE_CAPACITY);
+        }
+
         if(timeslot.getEndTime().before(timeslot.getStartTime())) {
             throw new BusinessException(ErrorCode.TIMESLOT_INVALID_TIME);
         }
@@ -54,6 +58,10 @@ public class TimeslotService {
     public List<Timeslot> getTimeslotByDate(Date date) {
         return timeslotRepository
                 .findTimeslotsByReservationDate(date);
+    }
+
+    public Timeslot getTimeslotById(Long id) {
+        return timeslotRepository.findTimeslotsById(id);
     }
 
 }

@@ -20,9 +20,11 @@ public class TimeslotDto {
 
     private Time endTime;
 
-    private Integer maxCapacity;
+    @Builder.Default
+    private Integer maxCapacity = 1;
 
-    private SlotStatus slotStatus;
+    @Builder.Default
+    private SlotStatus slotStatus = SlotStatus.CLOSED;
 
     public static TimeslotDto from(Timeslot timeslot) {
         return TimeslotDto.builder()

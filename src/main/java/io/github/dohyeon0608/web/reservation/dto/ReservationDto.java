@@ -14,7 +14,8 @@ public class ReservationDto {
 
     private Timeslot timeslot;
 
-    private ReservationStatus reservationStatus;
+    @Builder.Default
+    private ReservationStatus reservationStatus = ReservationStatus.CONFIRMED;
 
     public static ReservationDto from(Reservation reservation) {
         return ReservationDto.builder()

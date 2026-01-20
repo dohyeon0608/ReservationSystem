@@ -11,11 +11,13 @@ import lombok.Getter;
 public class PlaceDto {
     private PlaceType placeType;
 
-    private OperationStatus operationStatus;
+    @Builder.Default
+    private OperationStatus operationStatus = OperationStatus.OPENED;
 
     private String name;
 
-    private Integer maxCapacity;
+    @Builder.Default
+    private Integer maxCapacity = 1;
 
     public static PlaceDto from(Place place) {
         return PlaceDto.builder()

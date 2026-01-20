@@ -6,7 +6,6 @@ import io.github.dohyeon0608.web.reservation.entity.enums.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Setter
 @Getter
 @Entity
 @Builder
@@ -22,11 +21,27 @@ public class Reservation extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "timeslot_id")
     private Timeslot timeslot;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReservationStatus reservationStatus;
+
+    public void confirm() {
+        this.reservationStatus = ReservationStatus.CONFIRMED;
+    }
+
+    public void cancel() {
+        this.reservationStatus = ReservationStatus.CANCELLED;
+    }
+
+    public void changeTimeslot(Timeslot timeslot) {
+        if(this.timeslot != null) {
+            this.timeslot.removeReservation(this);
+        }
+        this.timeslot = timeslot;
+        timeslot.addReservation(this);
+    }
 }

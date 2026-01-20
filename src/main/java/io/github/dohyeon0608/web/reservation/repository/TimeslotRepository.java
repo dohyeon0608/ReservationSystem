@@ -9,6 +9,8 @@ import java.sql.Date;
 import java.util.List;
 
 public interface TimeslotRepository extends JpaRepository<Timeslot, Long> {
+    Timeslot findTimeslotsById(Long id);
+
     List<Timeslot> findTimeslotBySlotStatus(SlotStatus slotStatus);
 
     List<Timeslot> findTimeslotsByReservationDateAndPlace(Date reservationDate, Place place);

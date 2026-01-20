@@ -5,7 +5,6 @@ import io.github.dohyeon0608.web.reservation.entity.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Setter
 @Getter
 @Entity
 @Builder

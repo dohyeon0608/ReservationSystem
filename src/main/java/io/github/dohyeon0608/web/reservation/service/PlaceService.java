@@ -1,5 +1,6 @@
 package io.github.dohyeon0608.web.reservation.service;
 
+import io.github.dohyeon0608.web.reservation.dto.PlaceDto;
 import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
 import io.github.dohyeon0608.web.reservation.entity.enums.PlaceType;
@@ -19,19 +20,20 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
 
     // TODO: 유효성 검사 추가 예정
-    public Long createPlace(PlaceType placeType, OperationStatus operationStatus, String name, Integer max_capacity) {
+    public Long createPlace(PlaceDto dto) {
         Place place = Place.builder()
-                .placeType(placeType)
-                .operationStatus(operationStatus)
-                .name(name)
-                .max_capacity(max_capacity)
+                .placeType(dto.getPlaceType())
+                .operationStatus(dto.getOperationStatus())
+                .name(dto.getName())
+                .maxCapacity(dto.getMaxCapacity())
                 .build();
 
         return placeRepository.save(place).getId();
     }
 
     public List<Place> getOpenedPlaces(int pages, int size) {
-        return placeRepository.findPlaceByOperationStatus(OperationStatus.OPENED, PageRequest.of(pages, size));
+        return placeRepository
+                .findPlaceByOperationStatus(OperationStatus.OPENED, PageRequest.of(pages, size));
     }
 
     public Place getPlaceById(Long id) {

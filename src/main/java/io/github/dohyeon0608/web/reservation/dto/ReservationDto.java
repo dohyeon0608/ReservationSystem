@@ -5,7 +5,9 @@ import io.github.dohyeon0608.web.reservation.entity.enums.ReservationStatus;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Reservation;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Timeslot;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Builder
 public class ReservationDto {
     private User user;

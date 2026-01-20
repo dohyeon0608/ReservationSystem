@@ -32,11 +32,10 @@ public class UserService {
     }
 
     // 예제 코드
-    public UserDto getUser(Long id) {
-        User user =  userRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    public User getUser(Long id) {
 
-        return UserDto.from(user);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
 }

@@ -1,7 +1,6 @@
 package io.github.dohyeon0608.web.reservation.service;
 
-import io.github.dohyeon0608.web.reservation.entity.Place;
-import io.github.dohyeon0608.web.reservation.entity.enums.SlotStatus;
+import io.github.dohyeon0608.web.reservation.dto.TimeslotDto;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Timeslot;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
 import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
@@ -30,19 +29,21 @@ public class TimeslotService {
         Time endTime = timeslot.getEndTime();
 
         for(Timeslot t : reservationsOnDateAndPlace) {
-            boolean isValid = t.getStartTime().after(endTime) || t.getEndTime().before(startTime);
+            Time st = t.getStartTime();
+            Time et = t.getEndTime();
+            boolean isValid = st.compareTo(endTime) >= 0 || et.compareTo(startTime) <= 0;
             if(!isValid) throw new BusinessException(ErrorCode.TIMESLOT_DUPLICATED_TIME);
         }
     }
 
-    public Long createTimeslot(Place place, Date date, Time startTime, Time endTime, Integer maxCapacity, SlotStatus status) {
+    public Long createTimeslot(TimeslotDto dto) {
         Timeslot timeslot = Timeslot.builder()
-                .place(place)
-                .reservationDate(date)
-                .startTime(startTime)
-                .endTime(endTime)
-                .maxCapacity(maxCapacity)
-                .slotStatus(status)
+                .place(dto.getPlace())
+                .reservationDate(dto.getReservationDate())
+                .startTime(dto.getStartTime())
+                .endTime(dto.getEndTime())
+                .maxCapacity(dto.getMaxCapacity())
+                .slotStatus(dto.getSlotStatus())
                 .build();
 
         validation(timeslot);
@@ -51,7 +52,8 @@ public class TimeslotService {
     }
 
     public List<Timeslot> getTimeslotByDate(Date date) {
-        return timeslotRepository.findTimeslotsByReservationDate(date);
+        return timeslotRepository
+                .findTimeslotsByReservationDate(date);
     }
 
 }

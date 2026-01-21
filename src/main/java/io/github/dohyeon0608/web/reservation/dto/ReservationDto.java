@@ -10,17 +10,20 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ReservationDto {
-    private User user;
+    private Long id;
 
-    private Timeslot timeslot;
+    private UserDto user;
+
+    private TimeslotDto timeslot;
 
     @Builder.Default
     private ReservationStatus reservationStatus = ReservationStatus.CONFIRMED;
 
     public static ReservationDto from(Reservation reservation) {
         return ReservationDto.builder()
-                .user(reservation.getUser())
-                .timeslot(reservation.getTimeslot())
+                .id(reservation.getId())
+                .user(UserDto.from(reservation.getUser()))
+                .timeslot(TimeslotDto.from(reservation.getTimeslot()))
                 .reservationStatus(reservation.getReservationStatus())
                 .build();
     }

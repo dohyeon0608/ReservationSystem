@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,40 +24,44 @@ import java.util.List;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final TimeslotService timeslotService;
+    private final UserService userService;
 
-    private void validation(Reservation reservation) {
-        if(reservation.getTimeslot().getSlotStatus() == SlotStatus.CLOSED) {
-            throw new BusinessException(ErrorCode.RESERVATION_CANNOT_ON_CLOSED_SLOT);
-        }
-    }
-
-    // TODO: 다대일 매핑 LazyInitializationException 고치기
+    @Transactional
     public Long createReservation(ReservationDto dto) {
+        User user = userService.getUserById(
+                dto.getUser().getId()
+        );
+
+        Timeslot timeslot = timeslotService.getTimeslotById(
+                dto.getTimeslot().getId()
+        );
+
         Reservation reservation = Reservation.builder()
-                .user(dto.getUser())
-                .timeslot(dto.getTimeslot())
+                .user(user)
                 .reservationStatus(dto.getReservationStatus())
                 .build();
 
-        reservation.changeTimeslot(dto.getTimeslot());
-
-        validation(reservation);
+        reservation.changeTimeslot(timeslot);
 
         return reservationRepository.save(reservation).getId();
     }
 
+    @Transactional
     public List<Reservation> viewReservationByUser(User user, Pageable pageable) {
         return reservationRepository.findByUser(user, pageable);
     }
 
+    @Transactional
     public List<Reservation> viewReservationByUserAndStatus(User user, ReservationStatus status, Pageable pageable) {
         return reservationRepository.findByUserAndReservationStatus(user, status, pageable);
     }
 
+    @Transactional
     public List<Reservation> viewReservationByDate(Date date) {
         List<Timeslot> timeslots = timeslotService.getTimeslotByDate(date);
         return timeslots.stream()
                 .map(reservationRepository::findByTimeslot)
+                .flatMap(Optional::stream)
                 .toList();
     }
 

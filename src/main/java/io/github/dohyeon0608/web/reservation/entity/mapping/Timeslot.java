@@ -10,6 +10,7 @@ import lombok.*;
 
 import java.sql.Time;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -45,8 +46,9 @@ public class Timeslot extends BaseEntity {
     @Builder.Default
     private SlotStatus slotStatus = SlotStatus.OPENED;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Reservation> reservationList;
+    @OneToMany(mappedBy = "timeslot", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Reservation> reservationList = new ArrayList<>();
 
     private void open() {
         this.slotStatus = SlotStatus.OPENED;
@@ -57,11 +59,17 @@ public class Timeslot extends BaseEntity {
     }
 
     public void addReservation(Reservation reservation) {
+        if (this.reservationList.contains(reservation)) {
+            return;
+        }
+
         if(reservationList.size() >= this.maxCapacity) {
-            throw new BusinessException(ErrorCode.RESERVATION_ALREADY_FULL);
+            throw new BusinessException(ErrorCode.RESERVATION_CANNOT_ON_CLOSED_SLOT);
         }
 
         reservationList.add(reservation);
+
+        reservation.changeTimeslot(this);
 
         if(reservationList.size() == this.maxCapacity) {
             this.close();
@@ -70,12 +78,13 @@ public class Timeslot extends BaseEntity {
     }
 
     public void removeReservation(Reservation reservation) {
-        if(!reservationList.contains(reservation)) {
+        if (reservation == null || !this.reservationList.contains(reservation)) {
             return;
         }
 
+        this.reservationList.remove(reservation);
         this.open();
-        reservationList.remove(reservation);
+        reservation.changeTimeslot(null);
 
     }
 

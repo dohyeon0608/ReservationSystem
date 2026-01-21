@@ -41,7 +41,7 @@ public class PlaceService {
                 .findPlaceByOperationStatus(status, pageable);
     }
 
-    public Place getPlaceById(Long id) {
+    public Place getPlaceById(Long id) throws BusinessException {
         return placeRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PLACE_NOT_FOUND));
     }

@@ -3,6 +3,7 @@ package io.github.dohyeon0608.web.reservation;
 import io.github.dohyeon0608.web.reservation.dto.PlaceDto;
 import io.github.dohyeon0608.web.reservation.dto.ReservationDto;
 import io.github.dohyeon0608.web.reservation.dto.TimeslotDto;
+import io.github.dohyeon0608.web.reservation.dto.UserDto;
 import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.User;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
@@ -18,12 +19,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDateTime;
 
 @SpringBootTest
+@Transactional
 class ReservationApplicationTests {
 
 	@Autowired
@@ -57,7 +60,7 @@ class ReservationApplicationTests {
 		Place place = placeService.getPlaceById(placeId);
 
 		TimeslotDto timeslot1 = TimeslotDto.builder()
-				.place(place)
+				.place(PlaceDto.from(place))
 				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
 				.startTime(Time.valueOf(localDateTime.toLocalTime()))
 				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(2)))
@@ -66,7 +69,7 @@ class ReservationApplicationTests {
 				.build();
 
 		TimeslotDto timeslot2 = TimeslotDto.builder()
-				.place(place)
+				.place(PlaceDto.from(place))
 				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
 				.startTime(Time.valueOf(localDateTime.toLocalTime().plusHours(1)))
 				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(3)))
@@ -75,7 +78,7 @@ class ReservationApplicationTests {
 				.build();
 
 		TimeslotDto timeslot3 = TimeslotDto.builder()
-				.place(place)
+				.place(PlaceDto.from(place))
 				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
 				.startTime(Time.valueOf(localDateTime.toLocalTime().plusHours(2)))
 				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(4)))
@@ -100,10 +103,10 @@ class ReservationApplicationTests {
 		LocalDateTime localDateTime = LocalDateTime.of(2026, 1, 20, 13, 0, 0);
 
 		Long userId1 = userService.createUser("pooang@cau.ac.kr", "pooang", "pooang");
-		User user1 = userService.getUser(userId1);
+		User user1 = userService.getUserById(userId1);
 
 		Long userId2 = userService.createUser("causw@cau.ac.kr", "causw", "causw");
-		User user2 = userService.getUser(userId2);
+		User user2 = userService.getUserById(userId2);
 
 		PlaceDto placeDto = PlaceDto.builder()
 				.placeType(PlaceType.STUDY_ROOM)
@@ -115,8 +118,10 @@ class ReservationApplicationTests {
 
 		Place place = placeService.getPlaceById(placeId);
 
+		System.out.println("Length is " + timeslotService.getAll().size());
+
 		TimeslotDto timeslot1 = TimeslotDto.builder()
-				.place(place)
+				.place(PlaceDto.from(place))
 				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
 				.startTime(Time.valueOf(localDateTime.toLocalTime()))
 				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(2)))
@@ -128,13 +133,13 @@ class ReservationApplicationTests {
 		Timeslot timeslot = timeslotService.getTimeslotById(timeslotId);
 
 		ReservationDto reservationDto1 = ReservationDto.builder()
-				.user(user1)
-				.timeslot(timeslot)
+				.user(UserDto.from(user1))
+				.timeslot(TimeslotDto.from(timeslot))
 				.build();
 
 		ReservationDto reservationDto2 = ReservationDto.builder()
-				.user(user2)
-				.timeslot(timeslot)
+				.user(UserDto.from(user2))
+				.timeslot(TimeslotDto.from(timeslot))
 				.build();
 
 
@@ -142,7 +147,7 @@ class ReservationApplicationTests {
 		Assertions.assertThrowsExactly(BusinessException.class, () -> reservationService.createReservation(reservationDto2));
 
 		TimeslotDto timeslotDto2 = TimeslotDto.builder()
-				.place(place)
+				.place(PlaceDto.from(place))
 				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
 				.startTime(Time.valueOf(localDateTime.toLocalTime().plusHours(7)))
 				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(8)))
@@ -154,13 +159,13 @@ class ReservationApplicationTests {
 		Timeslot timeslot2 = timeslotService.getTimeslotById(timeslotId2);
 
 		ReservationDto reservationDto3 = ReservationDto.builder()
-				.user(user1)
-				.timeslot(timeslot2)
+				.user(UserDto.from(user1))
+				.timeslot(TimeslotDto.from(timeslot2))
 				.build();
 
 		ReservationDto reservationDto4 = ReservationDto.builder()
-				.user(user2)
-				.timeslot(timeslot2)
+				.user(UserDto.from(user2))
+				.timeslot(TimeslotDto.from(timeslot2))
 				.build();
 
 		Assertions.assertAll(() -> {

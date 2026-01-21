@@ -9,6 +9,8 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PlaceDto {
+    private Long id;
+
     private PlaceType placeType;
 
     @Builder.Default
@@ -21,6 +23,7 @@ public class PlaceDto {
 
     public static PlaceDto from(Place place) {
         return PlaceDto.builder()
+                .id(place.getId())
                 .placeType(place.getPlaceType())
                 .operationStatus(place.getOperationStatus())
                 .name(place.getName())

@@ -1,6 +1,5 @@
 package io.github.dohyeon0608.web.reservation.service;
 
-import io.github.dohyeon0608.web.reservation.dto.UserDto;
 import io.github.dohyeon0608.web.reservation.entity.User;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
 import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
@@ -31,8 +30,7 @@ public class UserService {
         return userRepository.save(user).getId();
     }
 
-    // 예제 코드
-    public User getUser(Long id) {
+    public User getUserById(Long id) throws BusinessException{
 
         return userRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));

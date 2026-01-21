@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface TimeslotRepository extends JpaRepository<Timeslot, Long> {
-    Timeslot findTimeslotsById(Long id);
+    Optional<Timeslot> findTimeslotsById(Long id);
 
     List<Timeslot> findTimeslotBySlotStatus(SlotStatus slotStatus);
 

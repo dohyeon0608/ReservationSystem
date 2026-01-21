@@ -38,10 +38,20 @@ public class Reservation extends BaseEntity {
     }
 
     public void changeTimeslot(Timeslot timeslot) {
-        if(this.timeslot != null) {
-            this.timeslot.removeReservation(this);
+        if (this.timeslot == timeslot) {
+            return;
         }
+
+        if (this.timeslot != null) {
+            Timeslot oldTimeslot = this.timeslot;
+            this.timeslot = null; // 무한 루프 방지를 위해 나를 먼저 비움
+            oldTimeslot.removeReservation(this);
+        }
+
         this.timeslot = timeslot;
-        timeslot.addReservation(this);
+
+        if (timeslot != null) {
+            timeslot.addReservation(this);
+        }
     }
 }

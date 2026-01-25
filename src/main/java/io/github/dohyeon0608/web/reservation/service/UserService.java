@@ -1,5 +1,6 @@
 package io.github.dohyeon0608.web.reservation.service;
 
+import io.github.dohyeon0608.web.reservation.dto.UserRegistrationDto;
 import io.github.dohyeon0608.web.reservation.entity.User;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
 import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
@@ -18,11 +19,13 @@ public class UserService {
         }
     }
 
-    public Long createUser(String email, String password, String nickname) {
+    public Long createUser(UserRegistrationDto dto) {
+        // TODO: 비밀번호 암호화 (아직 Security 구성 전이기에 평문으로 저장. 반드시 암호화 기능 구현할 것!!)
+
         User user = User.builder()
-                .email(email)
-                .password(password)
-                .nickname(nickname)
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .nickname(dto.getNickname())
                 .build();
 
         validation(user);

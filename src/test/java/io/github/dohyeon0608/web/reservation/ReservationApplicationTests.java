@@ -1,9 +1,6 @@
 package io.github.dohyeon0608.web.reservation;
 
-import io.github.dohyeon0608.web.reservation.dto.PlaceDto;
-import io.github.dohyeon0608.web.reservation.dto.ReservationDto;
-import io.github.dohyeon0608.web.reservation.dto.TimeslotDto;
-import io.github.dohyeon0608.web.reservation.dto.UserDto;
+import io.github.dohyeon0608.web.reservation.dto.*;
 import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.User;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
@@ -102,10 +99,22 @@ class ReservationApplicationTests {
 	public void 중복_예약_방지_테스트() {
 		LocalDateTime localDateTime = LocalDateTime.of(2026, 1, 20, 13, 0, 0);
 
-		Long userId1 = userService.createUser("pooang@cau.ac.kr", "pooang", "pooang");
+		UserRegistrationDto registerationDto1 = UserRegistrationDto.builder()
+				.email("pooang@cau.ac.kr")
+				.nickname("pooang")
+				.password("pooang")
+				.build();
+
+		UserRegistrationDto registerationDto2 = UserRegistrationDto.builder()
+				.email("causw@cau.ac.kr")
+				.nickname("causw")
+				.password("causw")
+				.build();
+
+		Long userId1 = userService.createUser(registerationDto1);
 		User user1 = userService.getUserById(userId1);
 
-		Long userId2 = userService.createUser("causw@cau.ac.kr", "causw", "causw");
+		Long userId2 = userService.createUser(registerationDto2);
 		User user2 = userService.getUserById(userId2);
 
 		PlaceDto placeDto = PlaceDto.builder()

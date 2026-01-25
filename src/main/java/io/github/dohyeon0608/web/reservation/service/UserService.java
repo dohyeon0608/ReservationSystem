@@ -6,29 +6,26 @@ import io.github.dohyeon0608.web.reservation.exception.BusinessException;
 import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
 import io.github.dohyeon0608.web.reservation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    private void validation(User user) {
-        if(userRepository.existsUserByEmail(user.getEmail())) {
-            throw new BusinessException(ErrorCode.USER_DUPLICATED_EMAIL);
-        }
-    }
-
+    @Transactional
     public Long createUser(UserRegistrationDto dto) {
-        // TODO: 비밀번호 암호화 (아직 Security 구성 전이기에 평문으로 저장. 반드시 암호화 기능 구현할 것!!)
-
         User user = User.builder()
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .nickname(dto.getNickname())
+                .role(dto.getRole())
                 .build();
 
-        validation(user);
+        user.encodePassword(passwordEncoder.encode(dto.getPassword()));
 
         return userRepository.save(user).getId();
     }

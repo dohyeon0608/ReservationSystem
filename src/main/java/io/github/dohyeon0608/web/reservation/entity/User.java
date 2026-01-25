@@ -1,6 +1,7 @@
 package io.github.dohyeon0608.web.reservation.entity;
 
 import io.github.dohyeon0608.web.reservation.entity.common.BaseEntity;
+import io.github.dohyeon0608.web.reservation.entity.enums.UserRole;
 import io.github.dohyeon0608.web.reservation.entity.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,14 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     @Builder.Default
     private UserStatus userStatus = UserStatus.ACTIVATED;
+
+    public void encodePassword(String password) {
+        this.password = password;
+    }
 }

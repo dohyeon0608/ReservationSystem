@@ -1,6 +1,7 @@
 package io.github.dohyeon0608.web.reservation.controller;
 
 import io.github.dohyeon0608.web.reservation.dto.request.TimeslotRequestDto;
+import io.github.dohyeon0608.web.reservation.dto.response.TimeslotDto;
 import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.enums.SlotStatus;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Timeslot;
@@ -36,13 +37,13 @@ public class TimeslotController {
 
     @Operation(summary = "장소별 예약 가능한 슬롯 검색", description = "해당 장소에서 예약 가능한 슬롯을 검색합니다.")
     @GetMapping("/place/{placeId}")
-    public ResponseEntity<ApiResponse<List<Long>>> getAvailableTimeslotByPlace(@PathVariable Long placeId, @ParameterObject Pageable page) {
+    public ResponseEntity<ApiResponse<List<TimeslotDto>>> getAvailableTimeslotByPlace(@PathVariable Long placeId, @ParameterObject Pageable page) {
         Place place = placeService.getPlaceById(placeId);
 
         List<Timeslot> timeslotList = timeslotService.getTimeslotByPlaceAndSlotStatus(place, SlotStatus.OPENED, page);
 
-        List<Long> dtoList = timeslotList.stream()
-                .map(Timeslot::getId)
+        List<TimeslotDto> dtoList = timeslotList.stream()
+                .map(TimeslotDto::from)
                 .toList();
 
         return ApiResponse.create(dtoList).toResponseEntity();

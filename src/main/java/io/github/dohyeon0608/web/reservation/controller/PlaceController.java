@@ -26,14 +26,14 @@ public class PlaceController {
 
     @Operation(summary = "예약 가능한 장소 조회", description = "현재 예약 가능한 장소를 조회합니다.")
     @GetMapping("/availablePlaces")
-    public ResponseEntity<ApiResponse<List<Long>>> getAvailablePlaces(@ParameterObject Pageable page) {
+    public ResponseEntity<ApiResponse<List<PlaceDto>>> getAvailablePlaces(@ParameterObject Pageable page) {
         List<Place> placeList = placeService.getPlacesByStatus(
                 OperationStatus.OPENED,
                 page
         );
 
-        List<Long> placeDtoList = placeList.stream()
-                .map(Place::getId)
+        List<PlaceDto> placeDtoList = placeList.stream()
+                .map(PlaceDto::from)
                 .toList();
 
         return ApiResponse.create(placeDtoList).toResponseEntity();

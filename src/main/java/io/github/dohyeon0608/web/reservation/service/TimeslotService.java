@@ -28,7 +28,7 @@ public class TimeslotService {
             throw new BusinessException(ErrorCode.TIMESLOT_NEGATIVE_CAPACITY);
         }
 
-        if(timeslot.getEndTime().isBefore(timeslot.getStartTime())) {
+        if(timeslot.getEndTime().isBefore(timeslot.getStartTime()) || timeslot.getEndTime().equals(timeslot.getStartTime())) {
             throw new BusinessException(ErrorCode.TIMESLOT_INVALID_TIME);
         }
 

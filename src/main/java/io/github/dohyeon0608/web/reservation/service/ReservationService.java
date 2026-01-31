@@ -31,7 +31,7 @@ public class ReservationService {
 
         Reservation reservation = Reservation.builder()
                 .user(user)
-                .reservationStatus(dto.getReservationStatus())
+                .reservationStatus(ReservationStatus.CONFIRMED)
                 .build();
 
         reservation.changeTimeslot(timeslot);

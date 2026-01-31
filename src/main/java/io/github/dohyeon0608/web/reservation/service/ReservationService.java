@@ -1,7 +1,6 @@
 package io.github.dohyeon0608.web.reservation.service;
 
 import io.github.dohyeon0608.web.reservation.dto.request.ReservationRequestDto;
-import io.github.dohyeon0608.web.reservation.dto.response.ReservationDto;
 import io.github.dohyeon0608.web.reservation.entity.User;
 import io.github.dohyeon0608.web.reservation.entity.enums.ReservationStatus;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Reservation;
@@ -12,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +50,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public List<Reservation> viewReservationByDate(Date date) {
+    public List<Reservation> viewReservationByDate(LocalDate date) {
         List<Timeslot> timeslots = timeslotService.getTimeslotByDate(date);
         return timeslots.stream()
                 .map(reservationRepository::findByTimeslot)

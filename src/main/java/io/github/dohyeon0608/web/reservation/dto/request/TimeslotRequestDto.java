@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Builder
@@ -20,13 +20,13 @@ public class TimeslotRequestDto {
     private Long placeId;
 
     @Schema(description = "예약 날짜", example = "2026-01-30")
-    private Date reservationDate;
+    private LocalDate reservationDate;
 
     @Schema(description = "예약 시작 시각", example = "13:00:00")
-    private Time startTime;
+    private LocalTime startTime;
 
     @Schema(description = "예약 종료 시각", example = "15:00:00")
-    private Time endTime;
+    private LocalTime endTime;
 
     @Builder.Default
     @Schema(description = "최대 예약 인원", example = "3", defaultValue = "1")

@@ -8,8 +8,8 @@ import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Time;
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +29,13 @@ public class Timeslot extends BaseEntity {
     private Place place;
 
     @Column(nullable = false)
-    private Date reservationDate;
+    private LocalDate reservationDate;
 
     @Column(nullable = false)
-    private Time startTime;
+    private LocalTime startTime;
 
     @Column(nullable = false)
-    private Time endTime;
+    private LocalTime endTime;
 
     @Column(nullable = false)
     @Builder.Default

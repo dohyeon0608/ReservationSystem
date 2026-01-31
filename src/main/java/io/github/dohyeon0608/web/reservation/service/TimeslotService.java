@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,21 +28,21 @@ public class TimeslotService {
             throw new BusinessException(ErrorCode.TIMESLOT_NEGATIVE_CAPACITY);
         }
 
-        if(timeslot.getEndTime().before(timeslot.getStartTime())) {
+        if(timeslot.getEndTime().isBefore(timeslot.getStartTime())) {
             throw new BusinessException(ErrorCode.TIMESLOT_INVALID_TIME);
         }
 
         List<Timeslot> timeslotList = timeslotRepository
                 .findTimeslotsByReservationDateAndPlace(timeslot.getReservationDate(), timeslot.getPlace());
 
-        Time startTime = timeslot.getStartTime();
-        Time endTime = timeslot.getEndTime();
+        LocalTime startTime = timeslot.getStartTime();
+        LocalTime endTime = timeslot.getEndTime();
 
         for(Timeslot t : timeslotList) {
             if(Objects.equals(t.getId(), timeslot.getId())) continue;
-            Time st = t.getStartTime();
-            Time et = t.getEndTime();
-            boolean isValid = st.compareTo(endTime) >= 0 || et.compareTo(startTime) <= 0;
+            LocalTime st = t.getStartTime();
+            LocalTime et = t.getEndTime();
+            boolean isValid = !st.isBefore(endTime) || !et.isAfter(startTime);
             if(!isValid) throw new BusinessException(ErrorCode.TIMESLOT_DUPLICATED_TIME);
         }
     }
@@ -68,11 +68,11 @@ public class TimeslotService {
         return timeslotRepository.findTimeslotsByPlaceAndSlotStatus(place, status, pageable);
     }
 
-    public List<Timeslot> getTimeslotByDateAndPlace(Date date, Place place) {
+    public List<Timeslot> getTimeslotByDateAndPlace(LocalDate date, Place place) {
         return timeslotRepository.findTimeslotsByReservationDateAndPlace(date, place);
     }
 
-    public List<Timeslot> getTimeslotByDate(Date date) {
+    public List<Timeslot> getTimeslotByDate(LocalDate date) {
         return timeslotRepository.findTimeslotsByReservationDate(date);
     }
 

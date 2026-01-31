@@ -7,8 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Builder
@@ -19,11 +19,11 @@ public class TimeslotDto {
 
     private PlaceDto place;
 
-    private Date reservationDate;
+    private LocalDate reservationDate;
 
-    private Time startTime;
+    private LocalTime startTime;
 
-    private Time endTime;
+    private LocalTime endTime;
 
     @Builder.Default
     private Integer maxCapacity = 1;

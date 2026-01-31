@@ -6,7 +6,6 @@ import io.github.dohyeon0608.web.reservation.dto.request.TimeslotRequestDto;
 import io.github.dohyeon0608.web.reservation.dto.request.UserRegistrationDto;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
 import io.github.dohyeon0608.web.reservation.entity.enums.PlaceType;
-import io.github.dohyeon0608.web.reservation.entity.enums.SlotStatus;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
 import io.github.dohyeon0608.web.reservation.service.PlaceService;
 import io.github.dohyeon0608.web.reservation.service.ReservationService;
@@ -18,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDateTime;
 
 @SpringBootTest
@@ -56,25 +53,25 @@ class ReservationApplicationTests {
 
 		TimeslotRequestDto timeslot1 = TimeslotRequestDto.builder()
 				.placeId(placeId)
-				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
-				.startTime(Time.valueOf(localDateTime.toLocalTime()))
-				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(2)))
+				.reservationDate(localDateTime.toLocalDate())
+				.startTime(localDateTime.toLocalTime())
+				.endTime(localDateTime.toLocalTime().plusHours(2))
 				.maxCapacity(1)
 				.build();
 
 		TimeslotRequestDto timeslot2 = TimeslotRequestDto.builder()
 				.placeId(placeId)
-				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
-				.startTime(Time.valueOf(localDateTime.toLocalTime().plusHours(1)))
-				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(3)))
+				.reservationDate(localDateTime.toLocalDate())
+				.startTime(localDateTime.toLocalTime().plusHours(1))
+				.endTime(localDateTime.toLocalTime().plusHours(3))
 				.maxCapacity(1)
 				.build();
 
 		TimeslotRequestDto timeslot3 = TimeslotRequestDto.builder()
 				.placeId(placeId)
-				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
-				.startTime(Time.valueOf(localDateTime.toLocalTime().plusHours(2)))
-				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(4)))
+				.reservationDate(localDateTime.toLocalDate())
+				.startTime(localDateTime.toLocalTime().plusHours(2))
+				.endTime(localDateTime.toLocalTime().plusHours(4))
 				.maxCapacity(1)
 				.build();
 
@@ -122,9 +119,9 @@ class ReservationApplicationTests {
 
 		TimeslotRequestDto timeslot1 = TimeslotRequestDto.builder()
 				.placeId(placeId)
-				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
-				.startTime(Time.valueOf(localDateTime.toLocalTime()))
-				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(2)))
+				.reservationDate(localDateTime.toLocalDate())
+				.startTime(localDateTime.toLocalTime())
+				.endTime(localDateTime.toLocalTime().plusHours(2))
 				.maxCapacity(1)
 				.build();
 
@@ -146,9 +143,9 @@ class ReservationApplicationTests {
 
 		TimeslotRequestDto timeslotDto2 = TimeslotRequestDto.builder()
 				.placeId(placeId)
-				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
-				.startTime(Time.valueOf(localDateTime.toLocalTime().plusHours(7)))
-				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(8)))
+				.reservationDate(localDateTime.toLocalDate())
+				.startTime(localDateTime.toLocalTime().plusHours(7))
+				.endTime(localDateTime.toLocalTime().plusHours(8))
 				.maxCapacity(2)
 				.build();
 

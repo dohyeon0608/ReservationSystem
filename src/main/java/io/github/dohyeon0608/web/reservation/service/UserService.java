@@ -1,6 +1,6 @@
 package io.github.dohyeon0608.web.reservation.service;
 
-import io.github.dohyeon0608.web.reservation.dto.UserRegistrationDto;
+import io.github.dohyeon0608.web.reservation.dto.request.UserRegistrationDto;
 import io.github.dohyeon0608.web.reservation.entity.User;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
 import io.github.dohyeon0608.web.reservation.exception.ErrorCode;

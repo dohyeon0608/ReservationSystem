@@ -1,4 +1,4 @@
-package io.github.dohyeon0608.web.reservation.dto;
+package io.github.dohyeon0608.web.reservation.dto.response;
 
 import io.github.dohyeon0608.web.reservation.entity.User;
 import lombok.Builder;

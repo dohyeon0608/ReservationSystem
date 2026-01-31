@@ -1,13 +1,11 @@
 package io.github.dohyeon0608.web.reservation.service;
 
-import io.github.dohyeon0608.web.reservation.dto.ReservationDto;
+import io.github.dohyeon0608.web.reservation.dto.request.ReservationRequestDto;
+import io.github.dohyeon0608.web.reservation.dto.response.ReservationDto;
 import io.github.dohyeon0608.web.reservation.entity.User;
 import io.github.dohyeon0608.web.reservation.entity.enums.ReservationStatus;
-import io.github.dohyeon0608.web.reservation.entity.enums.SlotStatus;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Reservation;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Timeslot;
-import io.github.dohyeon0608.web.reservation.exception.BusinessException;
-import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
 import io.github.dohyeon0608.web.reservation.repository.ReservationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +25,10 @@ public class ReservationService {
     private final UserService userService;
 
     @Transactional
-    public Long createReservation(ReservationDto dto) {
-        User user = userService.getUserById(
-                dto.getUser().getId()
-        );
+    public Long createReservation(ReservationRequestDto dto) {
+        User user = userService.getUserById(dto.getUserId());
 
-        Timeslot timeslot = timeslotService.getTimeslotById(
-                dto.getTimeslot().getId()
-        );
+        Timeslot timeslot = timeslotService.getTimeslotById(dto.getTimeslotId());
 
         Reservation reservation = Reservation.builder()
                 .user(user)

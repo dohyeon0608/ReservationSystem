@@ -1,4 +1,4 @@
-package io.github.dohyeon0608.web.reservation.dto;
+package io.github.dohyeon0608.web.reservation.dto.request;
 
 import io.github.dohyeon0608.web.reservation.entity.enums.UserRole;
 import jakarta.validation.constraints.Email;

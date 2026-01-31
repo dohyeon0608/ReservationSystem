@@ -1,12 +1,12 @@
 package io.github.dohyeon0608.web.reservation;
 
-import io.github.dohyeon0608.web.reservation.dto.*;
-import io.github.dohyeon0608.web.reservation.entity.Place;
-import io.github.dohyeon0608.web.reservation.entity.User;
+import io.github.dohyeon0608.web.reservation.dto.request.PlaceRequestDto;
+import io.github.dohyeon0608.web.reservation.dto.request.ReservationRequestDto;
+import io.github.dohyeon0608.web.reservation.dto.request.TimeslotRequestDto;
+import io.github.dohyeon0608.web.reservation.dto.request.UserRegistrationDto;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
 import io.github.dohyeon0608.web.reservation.entity.enums.PlaceType;
 import io.github.dohyeon0608.web.reservation.entity.enums.SlotStatus;
-import io.github.dohyeon0608.web.reservation.entity.mapping.Timeslot;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
 import io.github.dohyeon0608.web.reservation.service.PlaceService;
 import io.github.dohyeon0608.web.reservation.service.ReservationService;
@@ -46,7 +46,7 @@ class ReservationApplicationTests {
 	public void 타임슬롯_시간_겹침방지() {
 		LocalDateTime localDateTime = LocalDateTime.of(2026, 1, 20, 13, 0, 0);
 
-		PlaceDto placeDto = PlaceDto.builder()
+		PlaceRequestDto placeDto = PlaceRequestDto.builder()
 				.placeType(PlaceType.STUDY_ROOM)
 				.operationStatus(OperationStatus.OPENED)
 				.name("의혈스터디룸")
@@ -54,33 +54,28 @@ class ReservationApplicationTests {
 
 		Long placeId = placeService.createPlace(placeDto);
 
-		Place place = placeService.getPlaceById(placeId);
-
-		TimeslotDto timeslot1 = TimeslotDto.builder()
-				.place(PlaceDto.from(place))
+		TimeslotRequestDto timeslot1 = TimeslotRequestDto.builder()
+				.placeId(placeId)
 				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
 				.startTime(Time.valueOf(localDateTime.toLocalTime()))
 				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(2)))
 				.maxCapacity(1)
-				.slotStatus(SlotStatus.OPENED)
 				.build();
 
-		TimeslotDto timeslot2 = TimeslotDto.builder()
-				.place(PlaceDto.from(place))
+		TimeslotRequestDto timeslot2 = TimeslotRequestDto.builder()
+				.placeId(placeId)
 				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
 				.startTime(Time.valueOf(localDateTime.toLocalTime().plusHours(1)))
 				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(3)))
 				.maxCapacity(1)
-				.slotStatus(SlotStatus.OPENED)
 				.build();
 
-		TimeslotDto timeslot3 = TimeslotDto.builder()
-				.place(PlaceDto.from(place))
+		TimeslotRequestDto timeslot3 = TimeslotRequestDto.builder()
+				.placeId(placeId)
 				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
 				.startTime(Time.valueOf(localDateTime.toLocalTime().plusHours(2)))
 				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(4)))
 				.maxCapacity(1)
-				.slotStatus(SlotStatus.OPENED)
 				.build();
 
 
@@ -112,12 +107,10 @@ class ReservationApplicationTests {
 				.build();
 
 		Long userId1 = userService.createUser(registerationDto1);
-		User user1 = userService.getUserById(userId1);
 
 		Long userId2 = userService.createUser(registerationDto2);
-		User user2 = userService.getUserById(userId2);
 
-		PlaceDto placeDto = PlaceDto.builder()
+		PlaceRequestDto placeDto = PlaceRequestDto.builder()
 				.placeType(PlaceType.STUDY_ROOM)
 				.operationStatus(OperationStatus.OPENED)
 				.name("의혈스터디룸")
@@ -125,56 +118,50 @@ class ReservationApplicationTests {
 
 		Long placeId = placeService.createPlace(placeDto);
 
-		Place place = placeService.getPlaceById(placeId);
+        System.out.println("Length is " + timeslotService.getAll().size());
 
-		System.out.println("Length is " + timeslotService.getAll().size());
-
-		TimeslotDto timeslot1 = TimeslotDto.builder()
-				.place(PlaceDto.from(place))
+		TimeslotRequestDto timeslot1 = TimeslotRequestDto.builder()
+				.placeId(placeId)
 				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
 				.startTime(Time.valueOf(localDateTime.toLocalTime()))
 				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(2)))
 				.maxCapacity(1)
-				.slotStatus(SlotStatus.OPENED)
 				.build();
 
 		Long timeslotId = timeslotService.createTimeslot(timeslot1);
-		Timeslot timeslot = timeslotService.getTimeslotById(timeslotId);
 
-		ReservationDto reservationDto1 = ReservationDto.builder()
-				.user(UserDto.from(user1))
-				.timeslot(TimeslotDto.from(timeslot))
+        ReservationRequestDto reservationDto1 = ReservationRequestDto.builder()
+				.userId(userId1)
+				.timeslotId(timeslotId)
 				.build();
 
-		ReservationDto reservationDto2 = ReservationDto.builder()
-				.user(UserDto.from(user2))
-				.timeslot(TimeslotDto.from(timeslot))
+		ReservationRequestDto reservationDto2 = ReservationRequestDto.builder()
+				.userId(userId2)
+				.timeslotId(timeslotId)
 				.build();
 
 
 		Assertions.assertAll(() -> reservationService.createReservation(reservationDto1));
 		Assertions.assertThrowsExactly(BusinessException.class, () -> reservationService.createReservation(reservationDto2));
 
-		TimeslotDto timeslotDto2 = TimeslotDto.builder()
-				.place(PlaceDto.from(place))
+		TimeslotRequestDto timeslotDto2 = TimeslotRequestDto.builder()
+				.placeId(placeId)
 				.reservationDate(Date.valueOf(localDateTime.toLocalDate()))
 				.startTime(Time.valueOf(localDateTime.toLocalTime().plusHours(7)))
 				.endTime(Time.valueOf(localDateTime.toLocalTime().plusHours(8)))
 				.maxCapacity(2)
-				.slotStatus(SlotStatus.OPENED)
 				.build();
 
 		Long timeslotId2 = timeslotService.createTimeslot(timeslotDto2);
-		Timeslot timeslot2 = timeslotService.getTimeslotById(timeslotId2);
 
-		ReservationDto reservationDto3 = ReservationDto.builder()
-				.user(UserDto.from(user1))
-				.timeslot(TimeslotDto.from(timeslot2))
+		ReservationRequestDto reservationDto3 = ReservationRequestDto.builder()
+				.userId(userId1)
+				.timeslotId(timeslotId2)
 				.build();
 
-		ReservationDto reservationDto4 = ReservationDto.builder()
-				.user(UserDto.from(user2))
-				.timeslot(TimeslotDto.from(timeslot2))
+		ReservationRequestDto reservationDto4 = ReservationRequestDto.builder()
+				.userId(userId2)
+				.timeslotId(timeslotId2)
 				.build();
 
 		Assertions.assertAll(() -> {

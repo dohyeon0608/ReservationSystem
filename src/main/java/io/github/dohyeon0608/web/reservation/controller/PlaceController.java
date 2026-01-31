@@ -1,6 +1,7 @@
 package io.github.dohyeon0608.web.reservation.controller;
 
-import io.github.dohyeon0608.web.reservation.dto.PlaceDto;
+import io.github.dohyeon0608.web.reservation.dto.request.PlaceRequestDto;
+import io.github.dohyeon0608.web.reservation.dto.response.PlaceDto;
 import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
 import io.github.dohyeon0608.web.reservation.service.PlaceService;
@@ -49,7 +50,7 @@ public class PlaceController {
 
     @Operation(summary = "장소 추가 (관리자 전용)", description = "새로운 장소를 만듭니다.")
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Long>> createPlace(@RequestBody PlaceDto dto) {
+    public ResponseEntity<ApiResponse<Long>> createPlace(@RequestBody PlaceRequestDto dto) {
         Long id = placeService.createPlace(dto);
 
         return ApiResponse.create(id).toResponseEntity();

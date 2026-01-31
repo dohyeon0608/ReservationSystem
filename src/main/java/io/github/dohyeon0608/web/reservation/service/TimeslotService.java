@@ -1,12 +1,14 @@
 package io.github.dohyeon0608.web.reservation.service;
 
-import io.github.dohyeon0608.web.reservation.dto.TimeslotDto;
+import io.github.dohyeon0608.web.reservation.dto.request.TimeslotRequestDto;
 import io.github.dohyeon0608.web.reservation.entity.Place;
+import io.github.dohyeon0608.web.reservation.entity.enums.SlotStatus;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Timeslot;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
 import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
 import io.github.dohyeon0608.web.reservation.repository.TimeslotRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -45,10 +47,8 @@ public class TimeslotService {
         }
     }
 
-    public Long createTimeslot(TimeslotDto dto) {
-        Place place = placeService.getPlaceById(
-                dto.getPlace().getId()
-        );
+    public Long createTimeslot(TimeslotRequestDto dto) {
+        Place place = placeService.getPlaceById(dto.getPlaceId());
 
         Timeslot timeslot = Timeslot.builder()
                 .place(place)
@@ -56,7 +56,7 @@ public class TimeslotService {
                 .startTime(dto.getStartTime())
                 .endTime(dto.getEndTime())
                 .maxCapacity(dto.getMaxCapacity())
-                .slotStatus(dto.getSlotStatus())
+                .slotStatus(SlotStatus.OPENED)
                 .build();
 
         validation(timeslot);
@@ -64,9 +64,16 @@ public class TimeslotService {
         return timeslotRepository.save(timeslot).getId();
     }
 
+    public List<Timeslot> getTimeslotByPlaceAndSlotStatus(Place place, SlotStatus status, Pageable pageable) {
+        return timeslotRepository.findTimeslotsByPlaceAndSlotStatus(place, status, pageable);
+    }
+
+    public List<Timeslot> getTimeslotByDateAndPlace(Date date, Place place) {
+        return timeslotRepository.findTimeslotsByReservationDateAndPlace(date, place);
+    }
+
     public List<Timeslot> getTimeslotByDate(Date date) {
-        return timeslotRepository
-                .findTimeslotsByReservationDate(date);
+        return timeslotRepository.findTimeslotsByReservationDate(date);
     }
 
     public Timeslot getTimeslotById(Long id) {

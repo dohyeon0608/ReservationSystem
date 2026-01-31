@@ -1,6 +1,6 @@
 package io.github.dohyeon0608.web.reservation.service;
 
-import io.github.dohyeon0608.web.reservation.dto.PlaceDto;
+import io.github.dohyeon0608.web.reservation.dto.request.PlaceRequestDto;
 import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
@@ -23,7 +23,7 @@ public class PlaceService {
         }
     }
 
-    public Long createPlace(PlaceDto dto) {
+    public Long createPlace(PlaceRequestDto dto) {
         Place place = Place.builder()
                 .placeType(dto.getPlaceType())
                 .operationStatus(dto.getOperationStatus())

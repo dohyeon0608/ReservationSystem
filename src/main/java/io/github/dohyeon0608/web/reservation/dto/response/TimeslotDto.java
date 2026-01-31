@@ -1,15 +1,19 @@
-package io.github.dohyeon0608.web.reservation.dto;
+package io.github.dohyeon0608.web.reservation.dto.response;
 
 import io.github.dohyeon0608.web.reservation.entity.enums.SlotStatus;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Timeslot;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.sql.Time;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TimeslotDto {
     private Long id;
 

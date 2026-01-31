@@ -1,6 +1,6 @@
 package io.github.dohyeon0608.web.reservation.controller;
 
-import io.github.dohyeon0608.web.reservation.dto.UserRegistrationDto;
+import io.github.dohyeon0608.web.reservation.dto.request.UserRegistrationDto;
 import io.github.dohyeon0608.web.reservation.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

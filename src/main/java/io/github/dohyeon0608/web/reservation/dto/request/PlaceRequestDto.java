@@ -22,7 +22,7 @@ public class PlaceRequestDto {
     @Schema(description = "운영 상태")
     private OperationStatus operationStatus = OperationStatus.OPENED;
 
-    @Schema(description = "장소 이름", name = "참슬기식당")
+    @Schema(description = "장소 이름", example = "참슬기식당")
     private String name;
 
     @Builder.Default

@@ -18,8 +18,8 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
 
     private void validation(Place place) {
-        if(place.getMaxCapacity() < 0) {
-            throw new BusinessException(ErrorCode.PLACE_NEGATIVE_CAPACITY);
+        if(place.getMaxCapacity() <= 0) {
+            throw new BusinessException(ErrorCode.PLACE_NONPOSITIVE_CAPACITY);
         }
     }
 

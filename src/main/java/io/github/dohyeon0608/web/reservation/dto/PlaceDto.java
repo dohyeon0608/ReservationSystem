@@ -3,11 +3,15 @@ package io.github.dohyeon0608.web.reservation.dto;
 import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
 import io.github.dohyeon0608.web.reservation.entity.enums.PlaceType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlaceDto {
     private Long id;
 

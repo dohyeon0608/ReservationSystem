@@ -9,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,7 +37,7 @@ public class UserViewController {
 
         try {
             // 회원가입 로직 수행
-            Long id = userService.createUser(request);
+            userService.createUser(request);
             return "redirect:/login";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());

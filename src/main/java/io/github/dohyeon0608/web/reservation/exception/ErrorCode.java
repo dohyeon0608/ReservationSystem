@@ -11,7 +11,7 @@ public enum ErrorCode {
     USER_UNAUTHORIZED("USER-002", "인증되지 않은 사용자입니다.", HttpStatus.UNAUTHORIZED),
     USER_NOT_FOUND("USER-003", "알 수 없는 사용자입니다.", HttpStatus.NOT_FOUND),
     PLACE_NOT_FOUND("PLACE-001", "존재하지 않는 장소입니다.", HttpStatus.NOT_FOUND),
-    PLACE_NEGATIVE_CAPACITY("PLACE-002", "최대 인원은 음수가 될 수 없습니다.", HttpStatus.BAD_REQUEST),
+    PLACE_NONPOSITIVE_CAPACITY("PLACE-002", "최대 인원은 음수나 0이 될 수 없습니다.", HttpStatus.BAD_REQUEST),
     TIMESLOT_DUPLICATED_TIME("TIMESLT-001", "해당 시간에 이미 슬롯이 존재합니다.", HttpStatus.CONFLICT),
     TIMESLOT_INVALID_TIME("TIMESLT-002", "유효하지 않은 시간대입니다.", HttpStatus.BAD_REQUEST),
     TIMESLOT_NOT_FOUND("TIMESLT-003", "존재하지 않는 슬롯입니다.", HttpStatus.NOT_FOUND),

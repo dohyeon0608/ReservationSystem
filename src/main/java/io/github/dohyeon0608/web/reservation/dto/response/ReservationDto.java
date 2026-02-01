@@ -10,8 +10,6 @@ import lombok.Getter;
 public class ReservationDto {
     private Long id;
 
-    private UserDto user;
-
     private TimeslotDto timeslot;
 
     @Builder.Default
@@ -20,7 +18,6 @@ public class ReservationDto {
     public static ReservationDto from(Reservation reservation) {
         return ReservationDto.builder()
                 .id(reservation.getId())
-                .user(UserDto.from(reservation.getUser()))
                 .timeslot(TimeslotDto.from(reservation.getTimeslot()))
                 .reservationStatus(reservation.getReservationStatus())
                 .build();

@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +32,7 @@ public class TimeslotService {
         }
 
         List<Timeslot> timeslotList = timeslotRepository
-                .findTimeslotsByReservationDateAndPlace(timeslot.getReservationDate(), timeslot.getPlace());
+                .findAllTimeslotsByReservationDateAndPlace(timeslot.getReservationDate(), timeslot.getPlace());
 
         LocalTime startTime = timeslot.getStartTime();
         LocalTime endTime = timeslot.getEndTime();
@@ -65,15 +64,7 @@ public class TimeslotService {
     }
 
     public List<Timeslot> getTimeslotByPlaceAndSlotStatus(Place place, SlotStatus status, Pageable pageable) {
-        return timeslotRepository.findTimeslotsByPlaceAndSlotStatus(place, status, pageable);
-    }
-
-    public List<Timeslot> getTimeslotByDateAndPlace(LocalDate date, Place place) {
-        return timeslotRepository.findTimeslotsByReservationDateAndPlace(date, place);
-    }
-
-    public List<Timeslot> getTimeslotByDate(LocalDate date) {
-        return timeslotRepository.findTimeslotsByReservationDate(date);
+        return timeslotRepository.findAllTimeslotsByPlaceAndSlotStatus(place, status, pageable);
     }
 
     public Timeslot getTimeslotById(Long id) {

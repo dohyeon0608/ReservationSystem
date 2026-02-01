@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, Long> {
-    List<Place> findPlaceByOperationStatus(OperationStatus operationStatus, Pageable pageable);
+    List<Place> findAllPlaceByOperationStatus(OperationStatus operationStatus, Pageable pageable);
 
 }

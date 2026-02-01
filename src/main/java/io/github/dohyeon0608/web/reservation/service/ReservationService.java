@@ -4,7 +4,6 @@ import io.github.dohyeon0608.web.reservation.dto.request.ReservationRequestDto;
 import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.User;
 import io.github.dohyeon0608.web.reservation.entity.enums.ReservationStatus;
-import io.github.dohyeon0608.web.reservation.entity.enums.SlotStatus;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Reservation;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Timeslot;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +26,9 @@ public class ReservationService {
     private final TimeslotService timeslotService;
     private final UserService userService;
 
-    private void validation(Reservation reservation) {
-        if(reservation.getTimeslot().getSlotStatus() == SlotStatus.CLOSED) {
-            throw new BusinessException(ErrorCode.RESERVATION_CANNOT_ON_CLOSED_SLOT);
+    private void validation(User user, Timeslot timeslot) {
+        if(reservationRepository.existsByUserAndTimeslotAndReservationStatus(user, timeslot, ReservationStatus.CONFIRMED)) {
+            throw new BusinessException(ErrorCode.RESERVATION_DUPLICATED);
         }
     }
 
@@ -39,6 +37,8 @@ public class ReservationService {
         User user = userService.getUserById(userId);
         Timeslot timeslot = timeslotService.getTimeslotById(dto.getTimeslotId());
 
+        validation(user, timeslot);
+
         Reservation reservation = Reservation.builder()
                 .user(user)
                 .reservationStatus(ReservationStatus.CONFIRMED)
@@ -46,38 +46,22 @@ public class ReservationService {
 
         reservation.changeTimeslot(timeslot);
 
-        validation(reservation);
-
         return reservationRepository.save(reservation).getId();
     }
 
     @Transactional
     public List<Reservation> viewReservationByUser(User user, Pageable pageable) {
-        return reservationRepository.findByUser(user, pageable);
+        return reservationRepository.findAllByUser(user, pageable);
     }
 
     @Transactional
     public List<Reservation> viewReservationByUserAndStatus(User user, ReservationStatus status, Pageable pageable) {
-        return reservationRepository.findByUserAndReservationStatus(user, status, pageable);
+        return reservationRepository.findAllByUserAndReservationStatus(user, status, pageable);
     }
 
     @Transactional
     public List<Reservation> viewReservationByDateAndPlace(LocalDate date, Place place) {
-        List<Timeslot> timeslotList = timeslotService.getTimeslotByDateAndPlace(date, place);
-
-        return timeslotList.stream()
-                .map(reservationRepository::findByTimeslot)
-                .flatMap(Optional::stream)
-                .toList();
-    }
-
-    @Transactional
-    public List<Reservation> viewReservationByDate(LocalDate date) {
-        List<Timeslot> timeslotList = timeslotService.getTimeslotByDate(date);
-        return timeslotList.stream()
-                .map(reservationRepository::findByTimeslot)
-                .flatMap(Optional::stream)
-                .toList();
+        return reservationRepository.findAllByDateAndPlace(date, place);
     }
 
     @Transactional

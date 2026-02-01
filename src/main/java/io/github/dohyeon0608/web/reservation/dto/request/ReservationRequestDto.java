@@ -1,8 +1,5 @@
 package io.github.dohyeon0608.web.reservation.dto.request;
 
-import io.github.dohyeon0608.web.reservation.dto.response.TimeslotDto;
-import io.github.dohyeon0608.web.reservation.dto.response.UserDto;
-import io.github.dohyeon0608.web.reservation.entity.enums.ReservationStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

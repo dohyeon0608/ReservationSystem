@@ -15,10 +15,9 @@ import java.util.Optional;
 public interface TimeslotRepository extends JpaRepository<Timeslot, Long> {
     Optional<Timeslot> findTimeslotsById(Long id);
 
-    List<Timeslot> findTimeslotsByReservationDateAndPlace(LocalDate reservationDate, Place place);
+    List<Timeslot> findAllTimeslotsByReservationDateAndPlace(LocalDate reservationDate, Place place);
 
     @Lock(LockModeType.OPTIMISTIC)
-    List<Timeslot> findTimeslotsByPlaceAndSlotStatus(Place place, SlotStatus slotStatus, Pageable pageable);
+    List<Timeslot> findAllTimeslotsByPlaceAndSlotStatus(Place place, SlotStatus slotStatus, Pageable pageable);
 
-    List<Timeslot> findTimeslotsByReservationDate(LocalDate reservationDate);
 }

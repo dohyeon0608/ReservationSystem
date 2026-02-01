@@ -28,6 +28,8 @@ public class TimeslotDto {
     @Builder.Default
     private Integer maxCapacity = 1;
 
+    private Integer capacity;
+
     @Builder.Default
     private SlotStatus slotStatus = SlotStatus.CLOSED;
 
@@ -40,6 +42,7 @@ public class TimeslotDto {
                 .endTime(timeslot.getEndTime())
                 .maxCapacity(timeslot.getMaxCapacity())
                 .slotStatus(timeslot.getSlotStatus())
+                .capacity(timeslot.getReservationCount())
                 .build();
     }
 }

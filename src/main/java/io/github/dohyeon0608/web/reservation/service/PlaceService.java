@@ -38,7 +38,7 @@ public class PlaceService {
 
     public List<Place> getPlacesByStatus(OperationStatus status, Pageable pageable) {
         return placeRepository
-                .findPlaceByOperationStatus(status, pageable);
+                .findAllPlaceByOperationStatus(status, pageable);
     }
 
     public Place getPlaceById(Long id) throws BusinessException {

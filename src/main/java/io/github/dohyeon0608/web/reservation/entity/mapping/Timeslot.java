@@ -7,6 +7,7 @@ import io.github.dohyeon0608.web.reservation.exception.BusinessException;
 import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -50,6 +51,9 @@ public class Timeslot extends BaseEntity {
     @Builder.Default
     private List<Reservation> reservationList = new ArrayList<>();
 
+    @Formula("(SELECT count(*) FROM reservation r WHERE r.timeslot_id = id AND r.reservation_status = 'CONFIRMED')")
+    private Integer reservationCount;
+
     private void open() {
         this.slotStatus = SlotStatus.OPENED;
     }
@@ -63,7 +67,7 @@ public class Timeslot extends BaseEntity {
             return;
         }
 
-        if(reservationList.size() >= this.maxCapacity) {
+        if(reservationCount >= this.maxCapacity) {
             throw new BusinessException(ErrorCode.RESERVATION_CANNOT_ON_CLOSED_SLOT);
         }
 
@@ -71,7 +75,7 @@ public class Timeslot extends BaseEntity {
 
         reservation.changeTimeslot(this);
 
-        if(reservationList.size() == this.maxCapacity) {
+        if(reservationCount >= this.maxCapacity) {
             this.close();
         }
 
@@ -84,7 +88,6 @@ public class Timeslot extends BaseEntity {
 
         this.reservationList.remove(reservation);
         this.open();
-        reservation.changeTimeslot(null);
 
     }
 

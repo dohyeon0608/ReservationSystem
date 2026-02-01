@@ -4,7 +4,9 @@ import io.github.dohyeon0608.web.reservation.dto.request.PlaceRequestDto;
 import io.github.dohyeon0608.web.reservation.dto.response.PlaceDto;
 import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.enums.OperationStatus;
+import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
 import io.github.dohyeon0608.web.reservation.service.PlaceService;
+import io.github.dohyeon0608.web.reservation.util.ApiErrorCodes;
 import io.github.dohyeon0608.web.reservation.util.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,6 +43,7 @@ public class PlaceController {
 
     @Operation(summary = "장소 상세 정보 조회", description = "특정 장소의 상세 정보를 조회합니다.")
     @GetMapping("/info/{id}")
+    @ApiErrorCodes({ ErrorCode.PLACE_NOT_FOUND })
     public ResponseEntity<ApiResponse<PlaceDto>> getDetailedPlaceInfo(@PathVariable Long id) {
         Place place = placeService.getPlaceById(id);
         PlaceDto placeDto = PlaceDto.from(place);
@@ -50,6 +53,7 @@ public class PlaceController {
 
     @Operation(summary = "장소 추가 (관리자 전용)", description = "새로운 장소를 만듭니다.")
     @PostMapping("/admin/create")
+    @ApiErrorCodes({ ErrorCode.PLACE_NONPOSITIVE_CAPACITY })
     public ResponseEntity<ApiResponse<Long>> createPlace(@RequestBody PlaceRequestDto dto) {
         Long id = placeService.createPlace(dto);
 

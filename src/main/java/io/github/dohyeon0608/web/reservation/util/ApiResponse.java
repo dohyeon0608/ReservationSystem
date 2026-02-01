@@ -1,6 +1,7 @@
 package io.github.dohyeon0608.web.reservation.util;
 
 import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@Schema(description = "공통 응답 규격")
 public class ApiResponse<T> {
     private boolean succeed;
     private int code;

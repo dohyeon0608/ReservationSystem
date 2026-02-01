@@ -35,9 +35,8 @@ public class ReservationService {
     }
 
     @Transactional
-    public Long createReservation(ReservationRequestDto dto) {
-        User user = userService.getUserById(dto.getUserId());
-
+    public Long createReservation(Long userId, ReservationRequestDto dto) {
+        User user = userService.getUserById(userId);
         Timeslot timeslot = timeslotService.getTimeslotById(dto.getTimeslotId());
 
         Reservation reservation = Reservation.builder()

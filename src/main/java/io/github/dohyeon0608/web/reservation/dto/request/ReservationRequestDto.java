@@ -16,9 +16,6 @@ import lombok.NoArgsConstructor;
 @Schema(description = "예약 요청 데이터")
 public class ReservationRequestDto {
 
-    @Schema(description = "사용자 ID", example = "1")
-    private Long userId;
-
     @Schema(description = "예약 슬롯 ID", example = "1")
     private Long timeslotId;
 

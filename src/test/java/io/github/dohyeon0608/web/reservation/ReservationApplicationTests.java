@@ -128,18 +128,16 @@ class ReservationApplicationTests {
 		Long timeslotId = timeslotService.createTimeslot(timeslot1);
 
         ReservationRequestDto reservationDto1 = ReservationRequestDto.builder()
-				.userId(userId1)
 				.timeslotId(timeslotId)
 				.build();
 
 		ReservationRequestDto reservationDto2 = ReservationRequestDto.builder()
-				.userId(userId2)
 				.timeslotId(timeslotId)
 				.build();
 
 
-		Assertions.assertAll(() -> reservationService.createReservation(reservationDto1));
-		Assertions.assertThrowsExactly(BusinessException.class, () -> reservationService.createReservation(reservationDto2));
+		Assertions.assertAll(() -> reservationService.createReservation(userId1, reservationDto1));
+		Assertions.assertThrowsExactly(BusinessException.class, () -> reservationService.createReservation(userId2, reservationDto2));
 
 		TimeslotRequestDto timeslotDto2 = TimeslotRequestDto.builder()
 				.placeId(placeId)
@@ -152,18 +150,16 @@ class ReservationApplicationTests {
 		Long timeslotId2 = timeslotService.createTimeslot(timeslotDto2);
 
 		ReservationRequestDto reservationDto3 = ReservationRequestDto.builder()
-				.userId(userId1)
 				.timeslotId(timeslotId2)
 				.build();
 
 		ReservationRequestDto reservationDto4 = ReservationRequestDto.builder()
-				.userId(userId2)
 				.timeslotId(timeslotId2)
 				.build();
 
 		Assertions.assertAll(() -> {
-			reservationService.createReservation(reservationDto3);
-			reservationService.createReservation(reservationDto4);
+			reservationService.createReservation(userId1, reservationDto3);
+			reservationService.createReservation(userId2, reservationDto4);
 		});
 
 

@@ -35,8 +35,9 @@ public class ReservationController {
 
     @Operation(summary = "새 예약 생성", description = "새로운 예약을 생성합니다.")
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Long>> create(@RequestBody ReservationRequestDto dto) {
-        Long id = reservationService.createReservation(dto);
+    public ResponseEntity<ApiResponse<Long>> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ReservationRequestDto dto) {
+        User user = userService.getUserByEmail(userDetails.getUsername());
+        Long id = reservationService.createReservation(user.getId(), dto);
 
         return ApiResponse.create(id).toResponseEntity();
     }

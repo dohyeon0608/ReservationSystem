@@ -49,7 +49,7 @@ public class PlaceController {
     }
 
     @Operation(summary = "장소 추가 (관리자 전용)", description = "새로운 장소를 만듭니다.")
-    @PostMapping("/create")
+    @PostMapping("/admin/create")
     public ResponseEntity<ApiResponse<Long>> createPlace(@RequestBody PlaceRequestDto dto) {
         Long id = placeService.createPlace(dto);
 

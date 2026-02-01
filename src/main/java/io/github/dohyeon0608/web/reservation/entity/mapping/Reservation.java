@@ -29,12 +29,10 @@ public class Reservation extends BaseEntity {
     @Column(nullable = false)
     private ReservationStatus reservationStatus;
 
-    public void confirm() {
-        this.reservationStatus = ReservationStatus.CONFIRMED;
-    }
-
     public void cancel() {
         this.reservationStatus = ReservationStatus.CANCELLED;
+        this.timeslot.removeReservation(this);
+        this.delete();
     }
 
     public void changeTimeslot(Timeslot timeslot) {

@@ -28,7 +28,7 @@ public class TimeslotController {
     private final TimeslotService timeslotService;
 
     @Operation(summary = "새 예약 슬롯 생성 (관리자 전용)", description = "새로운 예약 슬롯을 생성합니다.")
-    @PostMapping("/create")
+    @PostMapping("/admin/create")
     public ResponseEntity<ApiResponse<Long>> createTimeslot(@RequestBody TimeslotRequestDto dto) {
         Long id = timeslotService.createTimeslot(dto);
 

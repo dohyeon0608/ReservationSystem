@@ -7,6 +7,7 @@ import io.github.dohyeon0608.web.reservation.entity.mapping.Timeslot;
 import io.github.dohyeon0608.web.reservation.exception.BusinessException;
 import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
 import io.github.dohyeon0608.web.reservation.repository.TimeslotRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -67,6 +68,7 @@ public class TimeslotService {
         return timeslotRepository.findAllTimeslotsByPlaceAndSlotStatus(place, status, pageable);
     }
 
+    @Transactional
     public Timeslot getTimeslotById(Long id) {
         return timeslotRepository.findTimeslotsById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TIMESLOT_NOT_FOUND));

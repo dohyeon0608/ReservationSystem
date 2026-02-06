@@ -6,9 +6,11 @@ import io.github.dohyeon0608.web.reservation.entity.Place;
 import io.github.dohyeon0608.web.reservation.entity.User;
 import io.github.dohyeon0608.web.reservation.entity.enums.ReservationStatus;
 import io.github.dohyeon0608.web.reservation.entity.mapping.Reservation;
+import io.github.dohyeon0608.web.reservation.entity.mapping.Timeslot;
 import io.github.dohyeon0608.web.reservation.exception.ErrorCode;
 import io.github.dohyeon0608.web.reservation.service.PlaceService;
 import io.github.dohyeon0608.web.reservation.service.ReservationService;
+import io.github.dohyeon0608.web.reservation.service.TimeslotService;
 import io.github.dohyeon0608.web.reservation.service.UserService;
 import io.github.dohyeon0608.web.reservation.util.ApiErrorCodes;
 import io.github.dohyeon0608.web.reservation.util.ApiResponse;
@@ -34,6 +36,7 @@ public class ReservationController {
     private final ReservationService reservationService;
     private final PlaceService placeService;
     private final UserService userService;
+    private final TimeslotService timeslotService;
 
     @Operation(summary = "새 예약 생성", description = "새로운 예약을 생성합니다.")
     @PostMapping("/create")
@@ -48,11 +51,11 @@ public class ReservationController {
     @Operation(summary = "예약 취소", description = "예약을 취소합니다.")
     @DeleteMapping("/cancel")
     @ApiErrorCodes({ ErrorCode.RESERVATION_NOT_FOUND, ErrorCode.RESERVATION_CANCELLED_BY_ANOTHER })
-    public ResponseEntity<ApiResponse<Boolean>> cancel(@AuthenticationPrincipal UserDetails userDetails, Long reservationId) {
-        Reservation reservation = reservationService.getReservationById(reservationId);
+    public ResponseEntity<ApiResponse<Boolean>> cancel(@AuthenticationPrincipal UserDetails userDetails, Long timeslotId) {
+        Timeslot timeslot = timeslotService.getTimeslotById(timeslotId);
         User user = userService.getUserByEmail(userDetails.getUsername());
 
-        reservationService.cancel(user, reservation);
+        reservationService.cancel(user, timeslot);
 
         return ApiResponse.create(true).toResponseEntity();
     }

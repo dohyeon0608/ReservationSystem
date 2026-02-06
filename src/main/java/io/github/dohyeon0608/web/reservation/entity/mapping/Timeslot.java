@@ -52,7 +52,7 @@ public class Timeslot extends BaseEntity {
     private List<Reservation> reservationList = new ArrayList<>();
 
     @Formula("(SELECT count(*) FROM reservation r WHERE r.timeslot_id = id AND r.reservation_status = 'CONFIRMED')")
-    private Integer reservationCount;
+    private Integer reservationCount = 0;
 
     private void open() {
         this.slotStatus = SlotStatus.OPENED;
@@ -62,12 +62,13 @@ public class Timeslot extends BaseEntity {
         this.slotStatus = SlotStatus.CLOSED;
     }
 
+    // 반드시 Reservation 엔티티 저장 전에 실행할 것.
     public void addReservation(Reservation reservation) {
         if (this.reservationList.contains(reservation)) {
             return;
         }
 
-        if(reservationCount >= this.maxCapacity) {
+        if(this.slotStatus == SlotStatus.CLOSED) {
             throw new BusinessException(ErrorCode.RESERVATION_CANNOT_ON_CLOSED_SLOT);
         }
 
@@ -75,7 +76,7 @@ public class Timeslot extends BaseEntity {
 
         reservation.changeTimeslot(this);
 
-        if(reservationCount >= this.maxCapacity) {
+        if(this.reservationCount + 1 >= this.maxCapacity) {
             this.close();
         }
 
@@ -87,6 +88,7 @@ public class Timeslot extends BaseEntity {
         }
 
         this.reservationList.remove(reservation);
+
         this.open();
 
     }

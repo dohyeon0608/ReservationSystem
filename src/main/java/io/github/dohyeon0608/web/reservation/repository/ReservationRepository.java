@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
@@ -25,4 +26,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("SELECT r FROM Reservation r JOIN r.timeslot t " +
             "WHERE t.reservationDate = :date AND t.place = :place")
     List<Reservation> findAllByDateAndPlace(@Param("date") LocalDate date, @Param("place") Place place);
+
+    Optional<Reservation> findByTimeslotAndReservationStatusAndUser(Timeslot timeslot, ReservationStatus status, User user);
 }

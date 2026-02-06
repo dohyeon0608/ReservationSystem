@@ -71,7 +71,15 @@ public class ReservationService {
     }
 
     @Transactional
-    public void cancel(User user, Reservation reservation) {
+    public Reservation getReservationByTimeslotAndUser(Timeslot timeslot, User user) {
+        return reservationRepository.findByTimeslotAndReservationStatusAndUser(timeslot, ReservationStatus.CONFIRMED, user)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESERVATION_NOT_FOUND));
+    }
+
+    @Transactional
+    public void cancel(User user, Timeslot timeslot) {
+        Reservation reservation = this.getReservationByTimeslotAndUser(timeslot, user);
+
         if(!Objects.equals(reservation.getUser().getId(), user.getId())) {
             throw new BusinessException(ErrorCode.RESERVATION_CANCELLED_BY_ANOTHER);
         }

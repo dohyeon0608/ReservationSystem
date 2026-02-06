@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TimeslotRepository extends JpaRepository<Timeslot, Long> {
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Timeslot> findTimeslotsById(Long id);
 
     List<Timeslot> findAllTimeslotsByReservationDateAndPlace(LocalDate reservationDate, Place place);
 
-    @Lock(LockModeType.OPTIMISTIC)
     List<Timeslot> findAllTimeslotsByPlaceAndSlotStatus(Place place, SlotStatus slotStatus, Pageable pageable);
 
 }
